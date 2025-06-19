@@ -1,23 +1,23 @@
 using UnityEngine;
 
-public class IdleState : JumpState
+public class IdleState : IState
 {
     private Animator animator;
-    public IdleState(Animator animator, CharacterController characterController)
-        : base(animator, characterController)
-    {
 
-    }
-    public void  Enter()
+    public IdleState(Animator animator)
     {
+        this.animator = animator;
+    }
+    public void Enter()
+    {
+        Debug.Log("IdleState Enter");
         animator.SetTrigger("Idle_Trigger");
     }
-    public void Update()
+    public  void Update()
     {
-        base.Update();
     }
-    public void Exit()
+    public  void Exit()
     {
-
+        Debug.Log("IdleState Exit");
     }
 }

@@ -5,17 +5,24 @@ public class AnimatorController : MonoBehaviour
     //private
     private Animator animator;
     private CharacterController characterController;
-    private IState currentState;
     private Vector2 smoothInput = Vector2.zero;
     private float smoothSpeed = 5f;
     //public
     public float moveSpeed = 5f;
+    //state 선언
+    private IState currentState;
+    private IdleState idleState;
+    private WalkState walkState;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
-        ChangeState(new IdleState(animator, characterController));
+
+        idleState = new IdleState(animator);
+        walkState = new WalkState(animator);
+
+        ChangeState(idleState);
     }
 
     void Update()
@@ -43,11 +50,11 @@ public class AnimatorController : MonoBehaviour
 
         if (move.magnitude > 0.1f)
         {
-            ChangeState(new WalkState(animator, characterController));
+            ChangeState(walkState);
         }
         else
         {
-            ChangeState(new IdleState(animator, characterController));
+            ChangeState(idleState);
         }
     }
     private void ChangeState(IState newState)
