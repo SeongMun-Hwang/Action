@@ -5,24 +5,23 @@ public class AnimatorController : MonoBehaviour
     //private
     private Animator animator;
     private CharacterController characterController;
-    private Vector3 velocity;
-    private State currentState;
+    private IState currentState;
     private Vector2 smoothInput = Vector2.zero;
     private float smoothSpeed = 5f;
     //public
     public float moveSpeed = 5f;
-    public float gravity = -9.81f;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
-        currentState = State.Idle;
+        ChangeState(new IdleState(animator, characterController));
     }
 
     void Update()
     {
         HandleMovement();
+        currentState?.Update();
     }
     private void HandleMovement()
     {
@@ -42,38 +41,22 @@ public class AnimatorController : MonoBehaviour
         }
         characterController.Move(move * moveSpeed * Time.deltaTime);
 
-        if (!characterController.isGrounded)
+        if (move.magnitude > 0.1f)
         {
-            velocity.y += gravity * Time.deltaTime;
-            characterController.Move(velocity * Time.deltaTime);
+            ChangeState(new WalkState(animator, characterController));
         }
         else
         {
-            velocity.y = -2f;
-        }
-
-        if(move.magnitude > 0.1f)
-        {
-            SetState(State.Walking);
-        }
-        else
-        {
-            SetState(State.Idle);
+            ChangeState(new IdleState(animator, characterController));
         }
     }
-    private void SetState(State newState)
+    private void ChangeState(IState newState)
     {
-        if (currentState == newState) return;
-        else currentState = newState;
+        if (currentState?.GetType() == newState.GetType()) return;
+        if (currentState != null)
+            currentState.Exit();
 
-        switch (currentState)
-        {
-            case State.Idle:
-                animator.SetTrigger("Idle_Trigger");
-                break;
-            case State.Walking:
-                animator.SetTrigger("Walk_Trigger");
-                break;
-        }
+        currentState = newState;
+        currentState.Enter();
     }
 }
