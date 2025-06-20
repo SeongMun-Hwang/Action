@@ -28,8 +28,8 @@ public class AnimatorController : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
         currentState?.Update();
+        HandleMovement();
     }
     private void HandleMovement()
     {
@@ -60,7 +60,7 @@ public class AnimatorController : MonoBehaviour
     }
     private void ChangeState(IState newState)
     {
-        if (currentState?.GetType() == newState.GetType()) return;
+        if (currentState == newState) return;
         if (currentState != null)
             currentState.Exit();
 

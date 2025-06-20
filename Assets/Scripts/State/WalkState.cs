@@ -5,6 +5,7 @@ public class WalkState : IState
 {
     private Animator animator;
     private AnimatorController animatorController;
+    public float acceleration = 2f;
     public WalkState(Animator animator, AnimatorController animatorController)
     {
         this.animator = animator;
@@ -17,16 +18,16 @@ public class WalkState : IState
     }
     public void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            animatorController.moveSpeed = animatorController.playerStats.runSpeed;
             animator.SetFloat("moveSpeed", animatorController.playerStats.runSpeed);
+            animatorController.moveSpeed = animatorController.playerStats.runSpeed;
             Debug.Log("running");
         }
-        else
+        else if(Input.GetKeyUp(KeyCode.LeftShift))
         {
-            animatorController.moveSpeed = animatorController.playerStats.walkSpeed;
             animator.SetFloat("moveSpeed", animatorController.playerStats.walkSpeed);
+            animatorController.moveSpeed = animatorController.playerStats.walkSpeed;
         }
     }
     public void Exit()
