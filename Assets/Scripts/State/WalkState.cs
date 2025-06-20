@@ -1,12 +1,14 @@
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class WalkState : IState
 {
     private Animator animator;
-
-    public WalkState(Animator animator)
+    private AnimatorController animatorController;
+    public WalkState(Animator animator, AnimatorController animatorController)
     {
         this.animator = animator;
+        this.animatorController = animatorController;
     }
     public void Enter()
     {
@@ -15,7 +17,17 @@ public class WalkState : IState
     }
     public void Update()
     {
-
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            animatorController.moveSpeed = animatorController.playerStats.runSpeed;
+            animator.SetFloat("moveSpeed", animatorController.playerStats.runSpeed);
+            Debug.Log("running");
+        }
+        else
+        {
+            animatorController.moveSpeed = animatorController.playerStats.walkSpeed;
+            animator.SetFloat("moveSpeed", animatorController.playerStats.walkSpeed);
+        }
     }
     public void Exit()
     {
