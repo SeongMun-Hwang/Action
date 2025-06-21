@@ -13,6 +13,7 @@ public class IdleState : IState
     {
         Debug.Log("IdleState Enter");
         animator.SetTrigger("Idle_Trigger");
+        animator.SetFloat("moveSpeed", 0f);
     }
     public  void Update()
     {
