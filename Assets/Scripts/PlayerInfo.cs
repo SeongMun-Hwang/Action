@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class PlayerStats
+public static class PlayerStats
 {
-    public float walkSpeed = 5f;
-    public float runSpeed = 10f;
+    public static float walkSpeed = 5f;
+    public static float runSpeed = 7.5f;
+    public static float sprintSpeed = 10f;
 }
 
 public class PlayerInfo : MonoBehaviour

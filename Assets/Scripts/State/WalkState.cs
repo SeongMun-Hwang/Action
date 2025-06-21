@@ -5,6 +5,7 @@ public class WalkState : IState
 {
     private Animator animator;
     private AnimatorController animatorController;
+    private bool isRunningDefault = false;
     public float acceleration = 2f;
     public WalkState(Animator animator, AnimatorController animatorController)
     {
@@ -18,16 +19,38 @@ public class WalkState : IState
     }
     public void Update()
     {
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            if (animatorController.moveSpeed == PlayerStats.walkSpeed)
+            {
+                isRunningDefault = true;
+                animatorController.moveSpeed = PlayerStats.runSpeed;
+                animator.SetFloat("moveSpeed", PlayerStats.runSpeed);
+            }
+            else
+            {
+                isRunningDefault = false;
+                animatorController.moveSpeed = PlayerStats.walkSpeed;
+                animator.SetFloat("moveSpeed", PlayerStats.walkSpeed);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            animator.SetFloat("moveSpeed", animatorController.playerStats.runSpeed);
-            animatorController.moveSpeed = animatorController.playerStats.runSpeed;
+            animator.SetFloat("moveSpeed", PlayerStats.sprintSpeed);
+            animatorController.moveSpeed = PlayerStats.sprintSpeed;
             Debug.Log("running");
         }
         else if(Input.GetKeyUp(KeyCode.LeftShift))
         {
-            animator.SetFloat("moveSpeed", animatorController.playerStats.walkSpeed);
-            animatorController.moveSpeed = animatorController.playerStats.walkSpeed;
+            if (isRunningDefault)
+            {
+                animatorController.moveSpeed = PlayerStats.runSpeed;
+            }
+            else
+            {
+                animatorController.moveSpeed = PlayerStats.walkSpeed;
+            }
+            animator.SetFloat("moveSpeed", animatorController.moveSpeed);
         }
     }
     public void Exit()

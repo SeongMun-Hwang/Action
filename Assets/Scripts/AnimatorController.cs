@@ -8,7 +8,6 @@ public class AnimatorController : MonoBehaviour
     private Vector2 smoothInput = Vector2.zero;
     private float smoothSpeed = 5f;
     //public
-    public PlayerStats playerStats = new PlayerStats();
     public float moveSpeed = 5f;
     //state 선언
     private IState currentState;
