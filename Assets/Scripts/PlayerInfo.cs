@@ -6,8 +6,3 @@ public static class PlayerStats
     public static float runSpeed = 7.5f;
     public static float sprintSpeed = 10f;
 }
-
-public class PlayerInfo : MonoBehaviour
-{
-
-}

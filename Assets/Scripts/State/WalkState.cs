@@ -4,53 +4,39 @@ using UnityEngine.InputSystem.XR;
 public class WalkState : IState
 {
     private Animator animator;
-    private AnimatorController animatorController;
-    private bool isRunningDefault = false;
+    private PlayerController playerController;
     public float acceleration = 2f;
-    public WalkState(Animator animator, AnimatorController animatorController)
+    public WalkState(Animator animator, PlayerController animatorController)
     {
         this.animator = animator;
-        this.animatorController = animatorController;
+        this.playerController = animatorController;
     }
     public void Enter()
     {
         Debug.Log("WalkState Enter");
+        animator.SetFloat("moveSpeed", playerController.moveSpeed);
         animator.SetTrigger("Walk_Trigger");
     }
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            if (animatorController.moveSpeed == PlayerStats.walkSpeed)
-            {
-                isRunningDefault = true;
-                animatorController.moveSpeed = PlayerStats.runSpeed;
-                animator.SetFloat("moveSpeed", PlayerStats.runSpeed);
-            }
-            else
-            {
-                isRunningDefault = false;
-                animatorController.moveSpeed = PlayerStats.walkSpeed;
-                animator.SetFloat("moveSpeed", PlayerStats.walkSpeed);
-            }
-        }
+
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             animator.SetFloat("moveSpeed", PlayerStats.sprintSpeed);
-            animatorController.moveSpeed = PlayerStats.sprintSpeed;
+            playerController.moveSpeed = PlayerStats.sprintSpeed;
             Debug.Log("running");
         }
         else if(Input.GetKeyUp(KeyCode.LeftShift))
         {
-            if (isRunningDefault)
+            if (playerController.isRunningDefault)
             {
-                animatorController.moveSpeed = PlayerStats.runSpeed;
+                playerController.moveSpeed = PlayerStats.runSpeed;
             }
             else
             {
-                animatorController.moveSpeed = PlayerStats.walkSpeed;
+                playerController.moveSpeed = PlayerStats.walkSpeed;
             }
-            animator.SetFloat("moveSpeed", animatorController.moveSpeed);
+            animator.SetFloat("moveSpeed", playerController.moveSpeed);
         }
     }
     public void Exit()

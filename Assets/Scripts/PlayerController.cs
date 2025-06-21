@@ -1,12 +1,20 @@
 using UnityEngine;
 
-public class AnimatorController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     //private
     private Animator animator;
     private CharacterController characterController;
     private Vector2 smoothInput = Vector2.zero;
     private float smoothSpeed = 5f;
+    //jump variables
+    private bool isGrounded = true;
+    private float jumpForce = 5f;
+    private float gravity = -9.81f;
+    private Vector3 velocity;
+    //default movement
+    public bool isRunningDefault = false;
+
     //public
     public float moveSpeed = 5f;
     //state 선언
@@ -27,7 +35,9 @@ public class AnimatorController : MonoBehaviour
 
     void Update()
     {
+        HandleDefaultMovement();
         currentState?.Update();
+        HandleJump();
         HandleMovement();
     }
     private void HandleMovement()
@@ -57,13 +67,55 @@ public class AnimatorController : MonoBehaviour
             ChangeState(idleState);
         }
     }
+    private void HandleJump()
+    {
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
+            animator.SetTrigger("Jump_Trigger");
+            isGrounded = false;
+            animator.SetBool("isGrounded", isGrounded);
+        }
+        velocity.y += gravity * Time.deltaTime;
+        characterController.Move(velocity * Time.deltaTime);
+        if (isGrounded)
+        {
+                velocity.y = -2f;         
+        }
+    }
+    private void HandleDefaultMovement()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            if (moveSpeed == PlayerStats.walkSpeed)
+            {
+                isRunningDefault = true;
+                moveSpeed = PlayerStats.runSpeed;
+            }
+            else
+            {
+                isRunningDefault = false;
+                moveSpeed = PlayerStats.walkSpeed;
+            }
+            animator.SetFloat("moveSpeed", moveSpeed);
+        }
+    }
     private void ChangeState(IState newState)
     {
         if (currentState == newState) return;
-        if (currentState != null)
-            currentState.Exit();
+        
+            currentState?.Exit();
 
         currentState = newState;
         currentState.Enter();
+    }
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        //ground layer == 3
+        if (hit.gameObject.layer == 3)
+        {
+            isGrounded = true;
+            animator.SetBool("isGrounded", isGrounded);
+        }
     }
 }
