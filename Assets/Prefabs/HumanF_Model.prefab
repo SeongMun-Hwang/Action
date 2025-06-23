@@ -278,6 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db61c5b5f65ab6e46abc4bbf9e58e64e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPivot: {fileID: 0}
   cameraPivot: {fileID: 0}
   sensitivity: 2
   maxAngle: 45

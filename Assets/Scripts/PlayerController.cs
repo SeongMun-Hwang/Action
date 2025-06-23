@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private IState currentState;
     private IdleState idleState;
     private WalkState walkState;
+    private LightAttackState lightAttackState;
 
     void Start()
     {
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
         idleState = new IdleState(animator);
         walkState = new WalkState(animator, this);
+        lightAttackState = new LightAttackState(animator, characterController);
 
         ChangeState(idleState);
     }
@@ -36,6 +38,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleDefaultMovement();
+        HandleAttack();
         currentState?.Update();
         HandleJump();
         HandleMovement();
@@ -62,7 +65,7 @@ public class PlayerController : MonoBehaviour
         {
             ChangeState(walkState);
         }
-        else
+        else if(move.magnitude <= 0.1f && currentState != lightAttackState)
         {
             ChangeState(idleState);
         }
@@ -98,6 +101,13 @@ public class PlayerController : MonoBehaviour
                 moveSpeed = PlayerStats.walkSpeed;
             }
             animator.SetFloat("moveSpeed", moveSpeed);
+        }
+    }
+    private void HandleAttack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            ChangeState(lightAttackState);
         }
     }
     private void ChangeState(IState newState)
