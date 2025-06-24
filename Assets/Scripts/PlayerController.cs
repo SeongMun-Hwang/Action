@@ -146,10 +146,7 @@ public class PlayerController : MonoBehaviour
     public void Combo_Disable()
     {
         isComboEnable = false;
-    }
-    public void AttackToIdle()
-    {
-        if(isNextCombo)
+        if (isNextCombo)
         {
             animator.SetTrigger("NextCombo_Trigger");
         }

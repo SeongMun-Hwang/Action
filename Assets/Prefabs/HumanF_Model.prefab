@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3516462172901354546}
   serializedVersion: 2
   m_LocalRotation: {x: 0.12256561, y: -0, z: -0, w: 0.9924604}
-  m_LocalPosition: {x: 0, y: 1.535, z: -1.693}
+  m_LocalPosition: {x: 0, y: 0.3, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -162,7 +162,7 @@ Transform:
   m_GameObject: {fileID: 5390096432568098885}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -266,6 +266,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRunningDefault: 0
   moveSpeed: 5
+  isComboEnable: 0
+  isNextCombo: 0
 --- !u!114 &4555596280196339418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,8 +280,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db61c5b5f65ab6e46abc4bbf9e58e64e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPivot: {fileID: 0}
-  cameraPivot: {fileID: 0}
+  playerPivot: {fileID: 1663476214518049569}
+  cameraPivot: {fileID: 6047349518144271315}
   sensitivity: 2
   maxAngle: 45
 --- !u!143 &5936993853555594632
