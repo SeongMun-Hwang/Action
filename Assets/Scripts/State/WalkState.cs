@@ -3,40 +3,38 @@ using UnityEngine.InputSystem.XR;
 
 public class WalkState : IState
 {
-    private Animator animator;
-    private PlayerController playerController;
+    private PlayerController player;
     public float acceleration = 2f;
-    public WalkState(Animator animator, PlayerController animatorController)
+    public WalkState(PlayerController player)
     {
-        this.animator = animator;
-        this.playerController = animatorController;
+        this.player = player;
     }
     public void Enter()
     {
         Debug.Log("WalkState Enter");
-        animator.SetFloat("moveSpeed", playerController.moveSpeed);
-        animator.SetTrigger("Walk_Trigger");
+        player.Animator.SetFloat("moveSpeed", player.moveSpeed);
+        player.Animator.SetTrigger("Walk_Trigger");
     }
     public void Update()
     {
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            animator.SetFloat("moveSpeed", PlayerStats.sprintSpeed);
-            playerController.moveSpeed = PlayerStats.sprintSpeed;
+            player.Animator.SetFloat("moveSpeed", PlayerStats.sprintSpeed);
+            player.moveSpeed = PlayerStats.sprintSpeed;
             Debug.Log("running");
         }
         else if(Input.GetKeyUp(KeyCode.LeftShift))
         {
-            if (playerController.isRunningDefault)
+            if (player.isRunningDefault)
             {
-                playerController.moveSpeed = PlayerStats.runSpeed;
+                player.moveSpeed = PlayerStats.runSpeed;
             }
             else
             {
-                playerController.moveSpeed = PlayerStats.walkSpeed;
+                player.moveSpeed = PlayerStats.walkSpeed;
             }
-            animator.SetFloat("moveSpeed", playerController.moveSpeed);
+            player.Animator.SetFloat("moveSpeed", player.moveSpeed);
         }
     }
     public void Exit()

@@ -3,17 +3,16 @@ using UnityEngine.InputSystem.XR;
 
 public class IdleState : IState
 {
-    private Animator animator;
-
-    public IdleState(Animator animator)
+    private PlayerController player;
+    public IdleState(PlayerController player)
     {
-        this.animator = animator;
+        this.player = player;
     }
     public void Enter()
     {
         Debug.Log("IdleState Enter");
-        animator.SetTrigger("Idle_Trigger");
-        animator.SetFloat("moveSpeed", 0f);
+        player.Animator.SetTrigger("Idle_Trigger");
+        player.Animator.SetFloat("moveSpeed", 0f);
     }
     public  void Update()
     {

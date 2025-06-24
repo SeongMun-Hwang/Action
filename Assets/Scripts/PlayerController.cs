@@ -18,33 +18,50 @@ public class PlayerController : MonoBehaviour
     //public
     public float moveSpeed = 5f;
     //state 선언
-    private IState currentState;
+    private StateMachine stateMachine;
     private IdleState idleState;
     private WalkState walkState;
     private LightAttackState lightAttackState;
+    //상태 접근
+    public IdleState IdleState => idleState;
+    public WalkState WalkState => walkState;
+    public LightAttackState LightAttackState => lightAttackState;
 
+    public Animator Animator => animator;
+    public CharacterController Controller => characterController;
+    public StateMachine StateMachine => stateMachine;
+
+    //combo
+    public bool isComboEnable;
+    public bool isNextCombo;
     void Start()
     {
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
 
-        idleState = new IdleState(animator);
-        walkState = new WalkState(animator, this);
-        lightAttackState = new LightAttackState(animator, characterController);
+        stateMachine = new StateMachine();
+        idleState = new IdleState(this);
+        walkState = new WalkState(this);
+        lightAttackState = new LightAttackState(this);
 
-        ChangeState(idleState);
+        stateMachine.ChangeState(idleState);
     }
 
     void Update()
     {
         HandleDefaultMovement();
         HandleAttack();
-        currentState?.Update();
+        stateMachine.Update();
         HandleJump();
         HandleMovement();
     }
     private void HandleMovement()
     {
+        if(stateMachine.Current is LightAttackState)
+        {
+            // 공격 상태에서는 이동을 하지 않음
+            return;
+        }
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
 
@@ -63,11 +80,11 @@ public class PlayerController : MonoBehaviour
 
         if (move.magnitude > 0.1f)
         {
-            ChangeState(walkState);
+            stateMachine.ChangeState(WalkState);
         }
-        else if(move.magnitude <= 0.1f && currentState != lightAttackState)
+        else if (move.magnitude <= 0.1f && !(stateMachine.Current is LightAttackState))
         {
-            ChangeState(idleState);
+            stateMachine.ChangeState(idleState);
         }
     }
     private void HandleJump()
@@ -83,7 +100,7 @@ public class PlayerController : MonoBehaviour
         characterController.Move(velocity * Time.deltaTime);
         if (isGrounded)
         {
-                velocity.y = -2f;         
+            velocity.y = -2f;
         }
     }
     private void HandleDefaultMovement()
@@ -107,17 +124,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            ChangeState(lightAttackState);
+            stateMachine.ChangeState(lightAttackState);
         }
-    }
-    private void ChangeState(IState newState)
-    {
-        if (currentState == newState) return;
-        
-            currentState?.Exit();
-
-        currentState = newState;
-        currentState.Enter();
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -127,5 +135,28 @@ public class PlayerController : MonoBehaviour
             isGrounded = true;
             animator.SetBool("isGrounded", isGrounded);
         }
+    }
+    /*
+     * 콤보 상태 관리 함수
+     */
+    public void Combo_Enable()
+    {
+        isComboEnable = true;
+    }
+    public void Combo_Disable()
+    {
+        isComboEnable = false;
+    }
+    public void AttackToIdle()
+    {
+        if(isNextCombo)
+        {
+            animator.SetTrigger("NextCombo_Trigger");
+        }
+        else
+        {
+            stateMachine.ChangeState(idleState);
+        }
+        isNextCombo = false;
     }
 }
