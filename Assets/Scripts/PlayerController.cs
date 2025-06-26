@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
         stateMachine.Update();
         HandleJump();
         HandleMovement();
+        HandleEvade();
     }
     private void HandleMovement()
     {
@@ -105,7 +106,7 @@ public class PlayerController : MonoBehaviour
     }
     private void HandleDefaultMovement()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
             if (moveSpeed == PlayerStats.walkSpeed)
             {
@@ -125,6 +126,13 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             stateMachine.ChangeState(lightAttackState);
+        }
+    }
+    private void HandleEvade()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            animator.SetTrigger("Evade_Trigger");
         }
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
