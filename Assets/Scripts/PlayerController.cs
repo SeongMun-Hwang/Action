@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private float gravity = -9.81f;
     private Vector3 velocity;
     //default movement
-    public bool isRunningDefault = false;
+    public bool isRunningDefault = true;
 
     //public
     public float moveSpeed = 5f;
@@ -34,6 +35,8 @@ public class PlayerController : MonoBehaviour
     //combo
     public bool isComboEnable;
     public bool isNextCombo;
+    //guard
+    public bool isGuardEnable;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -50,6 +53,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleDefaultMovement();
+        HandleGuard();
         HandleAttack();
         stateMachine.Update();
         HandleJump();
@@ -58,7 +62,7 @@ public class PlayerController : MonoBehaviour
     }
     private void HandleMovement()
     {
-        if(stateMachine.Current is LightAttackState)
+        if (stateMachine.Current is LightAttackState)
         {
             // 공격 상태에서는 이동을 하지 않음
             return;
@@ -134,6 +138,18 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger("Evade_Trigger");
         }
+    }
+    private void HandleGuard()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            isGuardEnable = true;
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            isGuardEnable = false;
+        }
+        animator.SetBool("isGuardEnable", isGuardEnable);
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
