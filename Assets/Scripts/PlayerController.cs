@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     //default movement
     public bool isRunningDefault = true;
-
     //public
     public float moveSpeed = 5f;
     //state 선언
@@ -69,7 +68,7 @@ public class PlayerController : MonoBehaviour
         }
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
-
+        Debug.Log($"Input X: {inputX}, Input Y: {inputY}");
         Vector2 targetInput = new Vector2(inputX, inputY);
         smoothInput = Vector2.Lerp(smoothInput, targetInput, smoothSpeed * Time.deltaTime);
 
@@ -87,7 +86,7 @@ public class PlayerController : MonoBehaviour
         {
             stateMachine.ChangeState(WalkState);
         }
-        else if (move.magnitude <= 0.1f && !(stateMachine.Current is LightAttackState))
+        else if (move.magnitude == 0 && !(stateMachine.Current is LightAttackState) && !isGuardEnable)
         {
             stateMachine.ChangeState(idleState);
         }
