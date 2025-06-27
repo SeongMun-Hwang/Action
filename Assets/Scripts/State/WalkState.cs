@@ -13,7 +13,6 @@ public class WalkState : IState
     {
         Debug.Log("WalkState Enter");
         player.Animator.SetFloat("moveSpeed", player.moveSpeed);
-        player.Animator.SetTrigger("Walk_Trigger");
     }
     public void Update()
     {

@@ -22,10 +22,12 @@ public class PlayerController : MonoBehaviour
     private IdleState idleState;
     private WalkState walkState;
     private LightAttackState lightAttackState;
+    private EvadeState evadeState;
     //상태 접근
     public IdleState IdleState => idleState;
     public WalkState WalkState => walkState;
     public LightAttackState LightAttackState => lightAttackState;
+    public EvadeState EvadeState => evadeState;
 
     public Animator Animator => animator;
     public CharacterController Controller => characterController;
@@ -45,6 +47,7 @@ public class PlayerController : MonoBehaviour
         idleState = new IdleState(this);
         walkState = new WalkState(this);
         lightAttackState = new LightAttackState(this);
+        evadeState = new EvadeState(this);
 
         stateMachine.ChangeState(idleState);
     }
@@ -139,6 +142,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
+            stateMachine.ChangeState(evadeState);
             animator.SetTrigger("Evade_Trigger");
         }
     }
