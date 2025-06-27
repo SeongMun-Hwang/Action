@@ -68,8 +68,16 @@ public class PlayerController : MonoBehaviour
         }
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
-        Debug.Log($"Input X: {inputX}, Input Y: {inputY}");
+
         Vector2 targetInput = new Vector2(inputX, inputY);
+        if (targetInput == Vector2.zero)
+        {
+            animator.SetFloat("moveSpeed", 0f);
+        }
+        else
+        {
+            animator.SetFloat("moveSpeed", moveSpeed);
+        }
         smoothInput = Vector2.Lerp(smoothInput, targetInput, smoothSpeed * Time.deltaTime);
 
         animator.SetFloat("Walk_Right", smoothInput.x);
@@ -84,11 +92,7 @@ public class PlayerController : MonoBehaviour
 
         if (move.magnitude > 0.1f)
         {
-            stateMachine.ChangeState(WalkState);
-        }
-        else if (move.magnitude == 0 && !(stateMachine.Current is LightAttackState) && !isGuardEnable)
-        {
-            stateMachine.ChangeState(idleState);
+            stateMachine.ChangeState(walkState);
         }
     }
     private void HandleJump()
