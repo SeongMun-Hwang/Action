@@ -56,11 +56,12 @@ public class PlayerController : MonoBehaviour
     {
         HandleDefaultMovement();
         HandleGuard();
+        HandleEvade();
+
         HandleAttack();
         stateMachine.Update();
         HandleJump();
         HandleMovement();
-        HandleEvade();
     }
     private void HandleMovement()
     {
