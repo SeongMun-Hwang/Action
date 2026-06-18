@@ -12,15 +12,14 @@ public class WalkState : IState
     public void Enter()
     {
         Debug.Log("WalkState Enter");
-        player.Animator.SetFloat("moveSpeed", player.moveSpeed);
+        player.Animator.SetFloat(PlayerController.Hash_MoveSpeed, player.moveSpeed);
     }
     public void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            player.Animator.SetFloat("moveSpeed", PlayerStats.sprintSpeed);
             player.moveSpeed = PlayerStats.sprintSpeed;
+            player.Animator.SetFloat(PlayerController.Hash_MoveSpeed, player.moveSpeed);
             Debug.Log("running");
         }
         else if(Input.GetKeyUp(KeyCode.LeftShift))
@@ -33,7 +32,7 @@ public class WalkState : IState
             {
                 player.moveSpeed = PlayerStats.walkSpeed;
             }
-            player.Animator.SetFloat("moveSpeed", player.moveSpeed);
+            player.Animator.SetFloat(PlayerController.Hash_MoveSpeed, player.moveSpeed);
         }
     }
     public void Exit()

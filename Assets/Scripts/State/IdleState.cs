@@ -11,8 +11,11 @@ public class IdleState : IState
     public void Enter()
     {
         Debug.Log("IdleState Enter");
-        player.Animator.SetTrigger("Idle_Trigger");
-        player.Animator.SetFloat("moveSpeed", 0f);
+        // Note: HashTrigger names should be added to PlayerController if needed, 
+        // but for now we'll use a local hash or string if not available.
+        // Let's assume we want to be consistent and add Idle_Trigger to PlayerController.
+        player.Animator.SetTrigger(Animator.StringToHash("Idle_Trigger"));
+        player.Animator.SetFloat(PlayerController.Hash_MoveSpeed, 0f);
     }
     public  void Update()
     {
